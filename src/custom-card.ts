@@ -6,6 +6,7 @@
 
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 /**
  * An example element.
@@ -18,38 +19,38 @@ import { customElement, property } from 'lit/decorators.js';
 export class CustomCard extends LitElement {
   static override styles = css`
     :host {
-      display: block;
-      border: solid 1px gray;
+      display: grid;
+      grid-template-rows: max-content 1fr;
+      background-color: whitesmoke;
       padding: 16px;
-      max-width: 800px;
+    }
+
+    h2 {
+      font-size: 1.5 rem;
+      font-family: 'Roboto';
+      color: var(--headline-color, black);
+    }
+
+    ::slotted(p) {
+      font-size: 1rem;
     }
   `;
 
-  /**
-   * The name to say "Hello" to.
-   */
-  @property()
-  name = 'World';
+  @property({type: String})
+  headline = '';
 
-  /**
-   * The number of times the button has been clicked.
-   */
-  @property({type: Number})
-  count = 0;
+  @property({type: String})
+  headlineColor = 'black';
 
   override render() {
     return html`
-      <h1>${this.sayHello(this.name)}!</h1>
-      <button @click=${this._onClick} part="button">
-        Click Count: ${this.count}
-      </button>
-      <slot></slot>
+      <div style=${styleMap({'--headline-color': this.headlineColor})}>
+        <header>
+          <h2>${this.headline}</h2>
+        </header>
+        <slot></slot>
+      </div>
     `;
-  }
-
-  private _onClick() {
-    this.count++;
-    this.dispatchEvent(new CustomEvent('count-changed'));
   }
 
   /**

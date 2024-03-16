@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html>
   <head>
@@ -8,15 +8,21 @@
     <script src="../node_modules/lit/polyfill-support.js"></script>
     <script type="module" src="../custom-card.js"></script>
     <style>
-      p {
-        border: solid 1px blue;
-        padding: 8px;
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        grid-gap: 20px;
       }
     </style>
   </head>
   <body>
-    <custom-card>
-      <p>This is child content</p>
-    </custom-card>
+    <div class="cards">
+      <custom-card headline="Sample headline" headlineColor="blue">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at leo
+          in odio semper finibus ac in eros.
+        </p>
+      </custom-card>
+    </div>
   </body>
 </html>
