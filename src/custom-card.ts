@@ -8,13 +8,6 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
-/**
- * An example element.
- *
- * @fires count-changed - Indicates when the count changes
- * @slot - This element has a slot
- * @csspart button - The button
- */
 @customElement('custom-card')
 export class CustomCard extends LitElement {
   static override styles = css`
@@ -25,10 +18,38 @@ export class CustomCard extends LitElement {
       padding: 16px;
     }
 
+    [part='button'] {
+      background-color: lightcoral;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    [part='button']:hover {
+      background-color: indianred;
+    }
+
+    [part='button']:active {
+      background-color: darkred;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    main div {
+      height: 20px;
+    }
+
     h2 {
       font-size: 1.5 rem;
       font-family: 'Roboto';
-      color: var(--headline-color, black);
+      color: var(--headline-color);
     }
 
     ::slotted(p) {
@@ -40,7 +61,39 @@ export class CustomCard extends LitElement {
   headline = '';
 
   @property({type: String})
-  headlineColor = 'black';
+  headlineColor = 'darkSlateGrey';
+
+  @property({type: Boolean})
+  showButton = false;
+
+  @property({type: Boolean})
+  buttonClicked = false;
+
+  private _onClick() {
+    this.dispatchEvent(
+      new CustomEvent('button-clicked', {bubbles: true, composed: true})
+    );
+  }
+
+  private _handleButtonClicked() {
+    this.buttonClicked = !this.buttonClicked;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener(
+      'button-clicked',
+      this._handleButtonClicked.bind(this)
+    );
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener(
+      'button-clicked',
+      this._handleButtonClicked.bind(this)
+    );
+  }
 
   override render() {
     return html`
@@ -48,17 +101,15 @@ export class CustomCard extends LitElement {
         <header>
           <h2>${this.headline}</h2>
         </header>
-        <slot></slot>
+        <main>
+          <slot></slot>
+          <div>${this.buttonClicked ? 'Button clicked!' : ''}</div>
+          ${this.showButton
+            ? html`<button part="button" @click=${this._onClick}>Click</button>`
+            : ''}
+        </main>
       </div>
     `;
-  }
-
-  /**
-   * Formats a greeting
-   * @param name The name to say "Hello" to
-   */
-  sayHello(name: string): string {
-    return `Hello, ${name}`;
   }
 }
 
