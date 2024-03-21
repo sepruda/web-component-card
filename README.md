@@ -1,26 +1,4 @@
-# LitElement TypeScript starter
-
-This project includes a sample component using LitElement with TypeScript.
-
-This template is generated from the `lit-starter-ts` package in [the main Lit
-repo](https://github.com/lit/lit). Issues and PRs for this template should be
-filed in that repo.
-
-## About this release
-
-This is a pre-release of Lit 3.0, the next major version of Lit.
-
-Lit 3.0 has very few breaking changes from Lit 2.0:
-
-- Drops support for IE11
-- Published as ES2021
-- Removes a couple of deprecated Lit 1.x APIs
-
-Lit 3.0 should require no changes to upgrade from Lit 2.0 for the vast majority of users. Once the full release is published, most apps and libraries will be able to extend their npm version ranges to include both 2.x and 3.x, like `"^2.7.0 || ^3.0.0"`.
-
-Lit 2.x and 3.0 are _interoperable_: templates, base classes, directives, decorators, etc., from one version of Lit will work with those from another.
-
-Please file any issues you find on our [issue tracker](https://github.com/lit/lit/issues).
+# Web Component demo of custom card
 
 ## Setup
 
@@ -46,7 +24,23 @@ To watch files and rebuild when the files are modified, run the following comman
 npm run build:watch
 ```
 
-Both the TypeScript compiler and lit-analyzer are configured to be very strict. You may want to change `tsconfig.json` to make them less strict.
+## API
+
+Render the card where you need it like this
+
+```html
+<custom-card headline="Sample headine"> {...card content} </custom-card>
+```
+
+You can change the color of the headline, using HTML color names or any other valid color string
+
+```html
+<custom-card headline="Red headine" headlineColor="red">
+  {...card content}
+</custom-card>
+```
+
+Show a button in a card by setting `showButton={true}` in the component, each card instance will listen to button clicks.
 
 ## Testing
 
@@ -80,20 +74,6 @@ npm run serve
 ```
 
 There is a development HTML file located at `/dev/index.html` that you can view at http://localhost:8000/dev/index.html. Note that this command will serve your code using Lit's development mode (with more verbose errors). To serve your code against Lit's production mode, use `npm run serve:prod`.
-
-## Editing
-
-If you use VS Code, we highly recommend the [lit-plugin extension](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin), which enables some extremely useful features for lit-html templates:
-
-- Syntax highlighting
-- Type-checking
-- Code completion
-- Hover-over docs
-- Jump to definition
-- Linting
-- Quick Fixes
-
-The project is setup to recommend lit-plugin to VS Code users if they don't already have it installed.
 
 ## Linting
 

@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2019 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -102,7 +96,6 @@ export class CustomCard extends LitElement {
           <h2>${this.headline}</h2>
         </header>
         <main>
-          <slot></slot>
           <div>${this.buttonClicked ? 'Button clicked!' : ''}</div>
           ${this.showButton
             ? html`<button part="button" @click=${this._onClick}>Click</button>`

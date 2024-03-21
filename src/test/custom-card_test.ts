@@ -4,10 +4,17 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import { CustomCard } from '../custom-card.js';
+import { CustomCard } from '../CustomCard/custom-card.js';
 
-import { fixture, assert } from '@open-wc/testing';
+import { fixture, assert, expect } from '@open-wc/testing';
 import { html } from 'lit/static-html.js';
+
+interface CustomCardTestable extends CustomCard {
+  headline: string;
+  headlineColor: string;
+  showButton: boolean;
+  buttonClicked: boolean;
+}
 
 suite('custom-card', () => {
   test('is defined', () => {
@@ -20,43 +27,55 @@ suite('custom-card', () => {
     assert.shadowDom.equal(
       el,
       `
-      <h1>Hello, World!</h1>
-      <button part="button">Click Count: 0</button>
-      <slot></slot>
+      <div style="--headline-color:darkSlateGrey;">
+      <header>
+          <h2>
+          </h2>
+        </header>
+        <main>
+          <div>
+          </div>
+        </main>
+      </div>
     `
     );
   });
 
-  test('renders with a set name', async () => {
-    const el = await fixture(html`<custom-card name="Test"></custom-card>`);
-    assert.shadowDom.equal(
-      el,
-      `
-      <h1>Hello, Test!</h1>
-      <button part="button">Click Count: 0</button>
-      <slot></slot>
-    `
-    );
+  test('has the correct initial state', async () => {
+    const el = await fixture(html`<custom-card></custom-card>`);
+    const customCard = el as CustomCardTestable;
+    expect(customCard.headline).to.equal('');
+    expect(customCard.headlineColor).to.equal('darkSlateGrey');
+    expect(customCard.showButton).to.be.false;
+    expect(customCard.buttonClicked).to.be.false;
   });
 
   test('handles a click', async () => {
-    const el = (await fixture(html`<custom-card></custom-card>`)) as CustomCard;
+    const el = (await fixture(
+      html`<custom-card showButton></custom-card>`
+    )) as CustomCard;
     const button = el.shadowRoot!.querySelector('button')!;
     button.click();
     await el.updateComplete;
     assert.shadowDom.equal(
       el,
       `
-      <h1>Hello, World!</h1>
-      <button part="button">Click Count: 1</button>
-      <slot></slot>
+      <div style="--headline-color: darkSlateGrey;">
+      <header>
+          <h2>
+          </h2>
+        </header>
+        <main>
+        <div>
+        Button clicked!
+      </div>
+      <button part="button">
+      Click
+    </button>
+        </main>
+
+      </div>
     `
     );
-  });
-
-  test('styling applied', async () => {
-    const el = (await fixture(html`<custom-card></custom-card>`)) as CustomCard;
-    await el.updateComplete;
-    assert.equal(getComputedStyle(el).paddingTop, '16px');
   });
 });
